@@ -7,12 +7,22 @@ public class Player : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Animator anim;
+    private SpriteRenderer sr;
+
+    private bool isDead;
+
+    [Header("Knockback info")]
+    [SerializeField] private Vector2 knockbackDir;
+    private bool isKnocked;
+    private bool canBeKnocked = true;
 
     [Header("Speed info")]
     [SerializeField] private float maxSpeed;
     [SerializeField] private float speedMultiplier;
+    private float defaultSpeed;
     [Space]
     [SerializeField] private float milestoneIncreaser;
+    private float defaultMilestoneIncrease;
     private float speedMilestone;
 
     [Header("Movement info")]
@@ -56,8 +66,11 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        sr = GetComponent<SpriteRenderer>();
 
         speedMilestone = milestoneIncreaser;
+        defaultSpeed = moveSpeed;
+        defaultMilestoneIncrease = milestoneIncreaser;
     }
 
     private void Update()
@@ -67,6 +80,18 @@ public class Player : MonoBehaviour
 
         slideTimeCounter -= Time.deltaTime;
         slideCooldownCounter -= Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.K))
+            Knockback();
+
+        if (Input.GetKeyDown(KeyCode.L) && !isDead)
+            StartCoroutine(Die());
+
+        if (isDead)
+            return;
+
+        if (isKnocked)
+            return;
 
         if (playerUnlocked)
             Movement();
@@ -79,6 +104,76 @@ public class Player : MonoBehaviour
         CheckForLedge();
         CheckForSlide();
         CheckInput();
+    }
+
+    private IEnumerator Die()
+    {
+        isDead = true;
+        canBeKnocked = false;
+        rb.velocity = knockbackDir;
+        anim.SetBool("isDead", true);
+
+        yield return new WaitForSeconds(1f);
+        rb.velocity = new Vector2(0, 0);
+    }
+
+    #region Knockback
+    private IEnumerator Invincibility()
+    {
+        Color originalColor = sr.color;
+        Color darkenColor = new Color(sr.color.r, sr.color.g, sr.color.b, .5f); // Darken the player's color when it gets hit 
+
+        canBeKnocked = false;
+        sr.color = darkenColor;
+        yield return new WaitForSeconds(.1f);
+
+        sr.color = originalColor;
+        yield return new WaitForSeconds(.1f);
+
+        sr.color = darkenColor;
+        yield return new WaitForSeconds(.15f);
+
+        sr.color = originalColor;
+        yield return new WaitForSeconds(.15f);
+
+        sr.color = darkenColor;
+        yield return new WaitForSeconds(.25f);
+
+        sr.color = originalColor;
+        yield return new WaitForSeconds(.25f);
+
+        sr.color = darkenColor;
+        yield return new WaitForSeconds(.3f);
+
+        sr.color = originalColor;
+        yield return new WaitForSeconds(.35f);
+
+        sr.color = darkenColor;
+        yield return new WaitForSeconds(.4f);
+
+        sr.color = originalColor;
+        canBeKnocked = true;        
+    }
+
+    private void Knockback()
+    {
+        if (!canBeKnocked)
+            return;
+
+        StartCoroutine(Invincibility());
+
+        isKnocked = true;
+        rb.velocity = knockbackDir;
+    }
+
+    private void CancelKnockback() => isKnocked = false;
+    #endregion
+
+    #region SpeedControll
+    private void SpeedReset()
+    {
+        moveSpeed = defaultSpeed;
+        milestoneIncreaser = defaultMilestoneIncrease;
     }
 
     private void SpeedController()
@@ -97,6 +192,7 @@ public class Player : MonoBehaviour
                 moveSpeed = maxSpeed;
         }
     }
+    #endregion
 
     #region Ledge Climb Region
     private void CheckForLedge()
@@ -104,6 +200,7 @@ public class Player : MonoBehaviour
         if (ledgeDetected && canGrabLedge) // Check if the player is close to a ledge and can grab it
         {
             canGrabLedge = false;
+            rb.gravityScale = 0; // Set the gravity scale to 0 to make the player stay in the air
 
             Vector2 ledgePosition = GetComponentInChildren<LedgeDetection>().transform.position; // Get the position of the ledge detected
 
@@ -120,6 +217,7 @@ public class Player : MonoBehaviour
     private void LedgeClimbOver()
     {
         canClimb = false;
+        rb.gravityScale = 5;
         transform.position = climbOverPosition; // Move the player to the climb over position
         Invoke("AllowLedgeGrab", 1f); // Allow the player to grab the ledge again after 0.5 seconds
     }
@@ -136,7 +234,10 @@ public class Player : MonoBehaviour
     private void Movement()
     {
         if (wallDetected)
+        {
+            SpeedReset();
             return;
+        }
 
         if (isSliding)
             rb.velocity = new Vector2(slideSpeed, rb.velocity.y); // Slide the player
@@ -192,7 +293,13 @@ public class Player : MonoBehaviour
         anim.SetBool("isGrounded", isGrounded);
         anim.SetBool("isSliding", isSliding);
         anim.SetBool("canClimb", canClimb);
+        anim.SetBool("isKnocked", isKnocked);
+
+        if (rb.velocity.y < -20)
+            anim.SetBool("canRoll", true);
     }
+
+    private void RollAnimFinished() => anim.SetBool("canRoll", false); // Set the canRoll parameter to false when the roll animation is finished
 
     private void CheckCollision()
     {
