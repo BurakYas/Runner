@@ -10,13 +10,15 @@ public class Player : MonoBehaviour
     private SpriteRenderer sr;
 
     private bool isDead;
+    private bool playerUnlocked;
 
     [Header("Knockback info")]
     [SerializeField] private Vector2 knockbackDir;
     private bool isKnocked;
     private bool canBeKnocked = true;
 
-    [Header("Speed info")]
+    [Header("Move info")]
+    [SerializeField] private float moveSpeed;
     [SerializeField] private float maxSpeed;
     [SerializeField] private float speedMultiplier;
     private float defaultSpeed;
@@ -25,13 +27,10 @@ public class Player : MonoBehaviour
     private float defaultMilestoneIncrease;
     private float speedMilestone;
 
-    [Header("Movement info")]
-    [SerializeField] private float moveSpeed;
+    [Header("Jump info")]
     [SerializeField] private float jumpForce;
-    [SerializeField] private float doubleJumpForce;
+    [SerializeField] private float doubleJumpForce;    
     private bool canDoubleJump;
-
-    private bool playerUnlocked;
 
     [Header("Slide info")]
     [SerializeField] private float slideSpeed;
@@ -94,7 +93,7 @@ public class Player : MonoBehaviour
             return;
 
         if (playerUnlocked)
-            Movement();
+            SetupMovement();
 
         if (isGrounded)
             canDoubleJump = true;
@@ -102,7 +101,7 @@ public class Player : MonoBehaviour
         SpeedController();
 
         CheckForLedge();
-        CheckForSlide();
+        CheckForSlideCancel();
         CheckInput();
     }
 
@@ -224,14 +223,15 @@ public class Player : MonoBehaviour
 
     private void AllowLedgeGrab() => canGrabLedge = true;
 
-    private void CheckForSlide()
+    #endregion
+
+    private void CheckForSlideCancel()
     {
         if (slideTimeCounter < 0 && !ceillingDetected)
             isSliding = false;
     }
-    #endregion
 
-    private void Movement()
+    private void SetupMovement()
     {
         if (wallDetected)
         {
@@ -245,6 +245,7 @@ public class Player : MonoBehaviour
             rb.velocity = new Vector2(moveSpeed, rb.velocity.y); // Move the player
     }
 
+    #region Input
     private void CheckInput()
     {
         if (Input.GetButtonDown("Fire2"))
@@ -283,7 +284,9 @@ public class Player : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, doubleJumpForce);
         }
     }
+    #endregion
 
+    #region Animations
     private void AnimatorControllers()
     {
         anim.SetFloat("xVelocity", rb.velocity.x); // Set the x velocity for the run animation
@@ -300,6 +303,7 @@ public class Player : MonoBehaviour
     }
 
     private void RollAnimFinished() => anim.SetBool("canRoll", false); // Set the canRoll parameter to false when the roll animation is finished
+    #endregion
 
     private void CheckCollision()
     {
