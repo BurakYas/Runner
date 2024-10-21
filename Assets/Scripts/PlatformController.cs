@@ -21,6 +21,7 @@ public class PlatformController : MonoBehaviour
             if (GameManager.instance.colorEntierPlatform)
             {
                 headerSr.color = GameManager.instance.platformColor;
+                //sr.color = GameManager.instance.platformColor;
             }
             else
             {

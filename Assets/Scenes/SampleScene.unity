@@ -838,7 +838,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 1.2088823, y: 0.49465418}
+  m_Offset: {x: 1.3067513, y: 0.49465418}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -849,7 +849,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 30.86947, y: 0.56476164}
+  m_Size: {x: 31.300095, y: 0.56476164}
   m_EdgeRadius: 0
 --- !u!4 &65558629
 Transform:
@@ -6318,7 +6318,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.0010690689, y: 0.0000014305115, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7141,6 +7141,7 @@ GameObject:
   m_Component:
   - component: {fileID: 621485635}
   - component: {fileID: 621485634}
+  - component: {fileID: 621485636}
   m_Layer: 0
   m_Name: CM vcam1
   m_TagString: Untagged
@@ -7194,7 +7195,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 621485633}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.0010690689, y: 0.0000009536743, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7202,6 +7203,21 @@ Transform:
   m_Father: {fileID: 949527912}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &621485636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621485633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f453f694addf4275988fac205bc91968, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BoundingShape2D: {fileID: 1349397307}
+  m_Damping: 0.5
+  m_MaxWindowSize: -1
 --- !u!1 &624868518
 GameObject:
   m_ObjectHideFlags: 0
@@ -9367,7 +9383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f655f78abb0f8fb4b97620163aafa040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colorEntierPlatform: 0
+  colorEntierPlatform: 1
   platformColor: {r: 0.26666668, g: 0.05228728, b: 0.2784314, a: 1}
   coins: 0
 --- !u!4 &848104700
@@ -12640,14 +12656,14 @@ MonoBehaviour:
   m_ScreenX: 0.1
   m_ScreenY: 0.75
   m_CameraDistance: 10
-  m_DeadZoneWidth: 0
-  m_DeadZoneHeight: 0
+  m_DeadZoneWidth: 0.01
+  m_DeadZoneHeight: 0.32
   m_DeadZoneDepth: 0
   m_UnlimitedSoftZone: 0
   m_SoftZoneWidth: 0.2
-  m_SoftZoneHeight: 0.45
-  m_BiasX: -0.28
-  m_BiasY: 0
+  m_SoftZoneHeight: 0.7
+  m_BiasX: -0.28000003
+  m_BiasY: -0.5
   m_CenterOnActivate: 1
   m_GroupFramingMode: 2
   m_AdjustmentMode: 0
@@ -14465,6 +14481,7 @@ GameObject:
   - component: {fileID: 1349397305}
   - component: {fileID: 1349397304}
   - component: {fileID: 1349397306}
+  - component: {fileID: 1349397307}
   m_Layer: 0
   m_Name: Background_05
   m_TagString: Untagged
@@ -14556,6 +14573,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parallaxEffect: 0.9
+--- !u!60 &1349397307
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1349397303}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -1.5, y: 3.5}
+      - {x: -1.5, y: -2}
+      - {x: 1.5, y: -2}
+      - {x: 1.5, y: 3.5}
 --- !u!1 &1351096161
 GameObject:
   m_ObjectHideFlags: 0

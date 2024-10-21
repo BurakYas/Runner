@@ -8,9 +8,13 @@ public class MovingTrap : Trap
     [SerializeField] private float rotationSpeed;
     [SerializeField] private Transform[] movePoints;
 
-    private int currentPointIndex;
+    private int currentPointIndex;    
 
-    private void Start() => transform.position = movePoints[0].position;    
+    protected override void Start()
+    {
+        base.Start();
+        transform.position = movePoints[0].position;
+    }
 
     private void Update()
     {
