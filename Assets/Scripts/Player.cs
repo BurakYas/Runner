@@ -10,7 +10,8 @@ public class Player : MonoBehaviour
     private SpriteRenderer sr;
 
     private bool isDead;
-    private bool playerUnlocked;
+    [HideInInspector] public bool playerUnlocked;
+    [HideInInspector] public bool extraLife;
 
     [Header("Knockback info")]
     [SerializeField] private Vector2 knockbackDir;
@@ -80,11 +81,13 @@ public class Player : MonoBehaviour
         slideTimeCounter -= Time.deltaTime;
         slideCooldownCounter -= Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.K))
-            Knockback();
+        extraLife = moveSpeed >= maxSpeed;
 
-        if (Input.GetKeyDown(KeyCode.L) && !isDead)
-            StartCoroutine(Die());
+        //if (Input.GetKeyDown(KeyCode.K))
+        //    Knockback();
+
+        //if (Input.GetKeyDown(KeyCode.L) && !isDead)
+        //    StartCoroutine(Die());
 
         if (isDead)
             return;
@@ -107,7 +110,7 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
-        if (moveSpeed == maxSpeed)
+        if (extraLife)
             Knockback();
         else
             StartCoroutine(Die());
@@ -258,8 +261,8 @@ public class Player : MonoBehaviour
     #region Input
     private void CheckInput()
     {
-        if (Input.GetButtonDown("Fire2"))
-            playerUnlocked = true;
+        //if (Input.GetButtonDown("Fire2"))
+        //    playerUnlocked = true;
 
 
         if (Input.GetButtonDown("Jump"))
